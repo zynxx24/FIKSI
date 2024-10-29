@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href='https://unpkg.com/boxicons@2.0.9/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/admin.css') }}">
+    <script src="{{ url_for('static', filename='js/chart.js') }}" async></script>
+    <script src="{{ url_for('static', filename='js/hide.js') }}" async></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" async></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js" async></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" async></script>
+    <title>AdminHub</title>
+</head>
+<body>
+    <!-- Sidebar -->
+    <section id="sidebar">
+        <a href="#" class="brand">
+            <i class='bx bxs-smile'></i>
+            <span class="text">AdminHub</span>
+        </a>
+        <ul class="side-menu top">
+            <li class="active">
+                <a href="#" data-target="dashboard">
+                    <i class='bx bxs-dashboard'></i>
+                    <span class="text">Dashboard</span>
+                </a>
+            </li>
+            <li>
+                <a href="#" data-target="manageqr">
+                    <i class='bx bxs-barcode'></i>
+                    <span class="text">Manage QR</span>
+                </a>
+            </li>
+            <li>
+                <a href="#" data-target="viewattendance">
+                    <i class='bx bxs-doughnut-chart'></i>
+                    <span class="text">View Attendance</span>
+                </a>
+            </li>
+            <li>
+                <a href="#" data-target="analytics">
+                    <i class='bx bxs-bar-chart-alt-2'></i>
+                    <span class="text">Analytics</span>
+                </a>
+            </li>
+        </ul>
+        <ul class="side-menu">
+            <li>
+                <form id="logout-form" action="{{ url_for('admin_logout') }}" method="POST" style="display:none;">
+                    <input type="submit" value="Logout">
+                </form>
+                <a href="#" class="logout" onclick="document.getElementById('logout-form').submit(); return false;">
+                    <i class='bx bxs-log-out-circle'></i>
+                    <span class="text">Logout</span>
+                </a>
+            </li>
+        </ul>
+    </section>
+
+    <!-- Content -->
+    <section id="content">
+        <nav>
+            <form id="chatbot-form" action="{{ url_for('admin_dashboard') }}" method="POST">
+                <div class="search-container">
+                    <input type="text" name="message" placeholder="Ask chatbot..." class="search-input" required>
+                    <button type="submit" class="search-btn"><i class='bx bx-search'></i></button>
+                </div>
+                <!-- UNDER SEARCH BOX RESPONE-->>
+            <div class="respone">
+                {% if chatbot_response %}
+                <h3>{{ chatbot_response }}</h3>
+                {% endif %}
+            </div>
+            </form>
+        </nav>
+        <main>
+            <!-- Dashboard Section -->
+            <section id="dashboard" class="content-section">
+                <h1>Dashboard</h1>
+                <ul class="box-info">
+                    <li>
+                        <i class='bx bxs-calendar-check'></i>
+                        <span class="text">
+                            <h3>{{ total_visitors or 0 }}</h3>
+                            <p>Absent</p>
+                        </span>
+                    </li>
+                    <li>
+                        <i class='bx bxs-group'></i>
+                        <span class="text">
+                            <h3>{{ absent_count or "0" }}</h3>
+                            <p>Recent</p>
+                        </span>
+                    </li>
+                    <li>
+                        <i class='bx bxs-calendar'></i>
+                        <span class="text">
+                            <h3>{{ avg_checkin or "0" }}</h3>
+                            <p>Average</p>
+                        </span>
+                    </li>
+                </ul>
+
+            </section>
+
+            <!-- Manage QR Codes Section -->
+            <section id="manageqr" class="content-section hidden">
+                <h3>Manage QR Codes</h3>
+                <form action="{{ url_for('admin_dashboard') }}" method="POST">
+                    <input type="text" name="qr_data" class="qr-input-field" placeholder="Enter data for QR Code" required>
+                    <button type="submit" class="send-btn">Generate QR Code</button>
+                </form>
+                {% if generated_qr_image %}
+                <div class="qr-code-frame">
+                    <img src="{{ generated_qr_image }}" alt="Generated QR Code">
+                </div>
+                {% else %}
+                <p>No QR Code generated yet.</p>
+                {% endif %}
+            </section>
+
+            <!-- View Attendance Section -->
+            <section id="viewattendance" class="content-section hidden">
+                <h3>Recent Attendance</h3>
+                <div class="attendance-box">
+                    <table class="attendance-table">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>NIS</th>
+                                <th>Class</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for user in users %}
+                            <tr>
+                                <td>{{ user.name }}</td>
+                                <td>{{ user.nis }}</td>
+                                <td>{{ user.class }}</td>
+                            </tr>
+                            {% else %}
+                            <tr>
+                                <td colspan="3">No data</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- Analytics Section -->
+            <section id="analytics" class="content-section hidden">
+                <canvas id="checkinChartContainer" style="width: 100%; height: 300px;"></canvas>
+            </section>
+        </main>
+    </section>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js" async></script>
+</body>
+</html>

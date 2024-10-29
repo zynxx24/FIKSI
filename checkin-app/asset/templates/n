@@ -1,0 +1,48 @@
+        const sidebarToggle = document.querySelector('.bx-menu');
+        const sidebar = document.getElementById('sidebar');
+        sidebarToggle.addEventListener('click', () => sidebar.classList.toggle('hide'));
+
+        // Handle chatbot form submission
+        document.getElementById('chatbot-form').addEventListener('submit', function (e) {
+            e.preventDefault(); // Prevent form from submitting the default way
+
+            const formData = new FormData(this);
+            const message = formData.get('message');
+
+            // Debug: log the message being sent
+            console.log("Message:", message);
+
+            // Send message to server using Fetch API
+            fetch("{{ url_for('admin_dashboard') }}", {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest'
+                }
+            })
+            .then(response => {
+                console.log("Server response:", response);
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.text();
+            })
+            .then(chatbotResponse => {
+                // Debug: log the response received from the server
+                console.log("Chatbot Response:", chatbotResponse);
+
+                // Insert the response into the popup
+                document.getElementById('chatbot-result').innerHTML = chatbotResponse;
+                document.getElementById('chatbot-popup').classList.remove('hidden');
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                document.getElementById('chatbot-result').innerHTML = 'Error: Could not get a response.';
+                document.getElementById('chatbot-popup').classList.remove('hidden');
+            });
+        });
+
+        // Close the popup
+        document.getElementById('close-popup').addEventListener('click', function () {
+            document.getElementById('chatbot-popup').classList.add('hidden');
+        });

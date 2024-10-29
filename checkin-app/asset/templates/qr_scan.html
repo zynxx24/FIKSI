@@ -1,0 +1,74 @@
+{% extends "layout.html" %}
+{% block content %}
+<main>
+    <article>
+        <h1>Scan QR Code</h1>
+    </article>
+    <div class="content">
+        <h1 class="main-h1">Welcome to our website</h1>
+        <h3 class="main-h4">This website helps teachers and students do attendance</h3>
+    </div>
+    <button id="start-camera" class="btn">Start Camera</button>
+    <div id="qr-reader" style="width: 350x; display:none;"></div>
+    <div id="result">
+        <span id="success-message"></span>
+        <span id="error-message"></span>
+    </div>
+</main>
+
+<script>
+    function onScanSuccess(decodedText, decodedResult) {
+        console.log(`Code scanned = ${decodedText}`, decodedResult);
+
+        fetch('/validate_qr', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ qr_data: decodedText })
+        })
+        .then(response => response.json())
+        .then(data => {
+            const successMessage = document.getElementById("success-message");
+            const errorMessage = document.getElementById("error-message");
+            successMessage.innerHTML = "";
+            errorMessage.innerHTML = "";
+
+            if (data.success) {
+                successMessage.innerHTML = "QR Code valid! Redirecting to check-in page...";
+                setTimeout(() => {
+                    window.location.href = '/checkin';
+                }, 2000);
+            } else {
+                errorMessage.innerHTML = "Invalid QR Code. Please try again.";
+            }
+        })
+        .catch(error => {
+            console.error('Error validating QR Code:', error);
+            document.getElementById('error-message').innerHTML = "Error validating QR Code. Please try again.";
+        });
+    }
+
+    function onScanFailure(error) {
+        console.warn(`Code scan error = ${error}`);
+    }
+
+    const html5QrCode = new Html5Qrcode("qr-reader");
+
+    document.getElementById('start-camera').addEventListener('click', () => {
+        const qrReaderElement = document.getElementById('qr-reader');
+        qrReaderElement.style.display = 'block';
+        document.getElementById('start-camera').style.display = 'none'; // Hide start button after clicking
+
+        const qrConfig = { fps: 24, qrbox: 160 };
+        html5QrCode.start(
+            { facingMode: "environment" },
+            qrConfig,
+            onScanSuccess,
+            onScanFailure
+        ).catch(err => {
+            console.log(`Unable to start scanning: ${err}`);
+        });
+    });
+</script>
+{% endblock %}

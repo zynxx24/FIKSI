@@ -1,0 +1,21 @@
+{% extends "layout.html" %}
+{% block content %}
+<div class="container">
+    <h2>Cooldown</h2>
+    <p>You have checked in. Please come back in <span id="countdown"></span> hours.</p>
+</div>
+
+<script>
+    let countdown = 18 * 60 * 60; // 18 hours in seconds
+    let interval = setInterval(() => {
+        let hours = Math.floor(countdown / 3600);
+        document.getElementById('countdown').innerText = hours;
+        countdown--;
+
+        if (countdown <= 0) {
+            clearInterval(interval);
+            window.location.href = "/";
+        }
+    }, 1000);
+</script>
+{% endblock %}

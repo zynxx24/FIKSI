@@ -1,0 +1,13 @@
+{% extends "layout.html" %}
+{% block content %}
+<div class="container">
+    <h2>Check-in</h2>
+    <form action="{{ url_for('submit_checkin') }}" method="POST">
+        <input type="text" name="name" placeholder="Name" required>
+        <input type="text" name="absen" placeholder="Absen" required>
+        <input type="text" name="class" placeholder="Class" required>
+        <input type="number" name="nis" placeholder="NIS" required>
+        <button type="submit">Submit</button>
+    </form>
+</div>
+{% endblock %}

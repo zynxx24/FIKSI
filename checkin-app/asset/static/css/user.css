@@ -1,0 +1,178 @@
+/* Universal reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(135deg, #073B4C, #118AB2); /* Deep dark gradient */
+    color: #ffffff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    overflow: hidden;
+}
+
+/* Modern Hero Section for QR Code Scanning */
+main {
+    width: 90%;
+    max-width: 900px;
+    padding: 60px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 40px;
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    animation: fadeInUp 1.5s ease-in-out;
+    transition: transform 0.5s ease;
+}
+
+main:hover {
+    transform: translateY(-10px);
+}
+
+/* High Contrast and Bold Typography */
+h1 {
+    font-size: 3rem;
+    color: #FFD166;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    margin-bottom: 40px;
+    font-weight: 900;
+    text-align: center;
+    animation: slideIn 1.2s ease-in-out;
+    background: linear-gradient(90deg, #FFD166, #F78C6B);
+    -webkit-background-clip: text;
+    color: transparent; /* Gradient on text */
+}
+
+.main-h1, .main-h4 {
+    color: #ffffff;
+    text-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.main-h1 {
+    font-size: 2rem;
+}
+
+.main-h4 {
+    font-size: 1.4rem;
+    opacity: 0.85;
+}
+
+/* Premium CTA Button */
+#start-camera {
+    background-color: #06D6A0;
+    padding: 15px 35px;
+    font-size: 1.4rem;
+    border-radius: 50px;
+    border: none;
+    color: #ffffff;
+    font-weight: bold;
+    cursor: pointer;
+    letter-spacing: 1.5px;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3), 0 -4px 10px rgba(255, 255, 255, 0.1);
+    transition: all 0.4s ease;
+}
+
+#start-camera:hover {
+    background-color: #04C58E;
+    transform: translateY(-5px);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.5), 0 -6px 15px rgba(255, 255, 255, 0.1);
+}
+
+#qr-reader {
+    margin: 30px auto;
+    width: 100%;
+    max-width: 320px;
+    border-radius: 15px;
+    background: #073B4C;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3), 0 -4px 15px rgba(255, 255, 255, 0.1);
+}
+
+#success-message, #error-message {
+    font-size: 1.4rem;
+    margin-top: 20px;
+    text-align: center;
+    font-weight: bold;
+    transition: all 0.4s ease;
+}
+
+#success-message {
+    color: #06D6A0;
+}
+
+#error-message {
+    color: #F78C6B;
+}
+
+/* Hero Section Animations */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(40px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes slideIn {
+    from {
+        transform: translateX(-100%);
+    }
+    to {
+        transform: translateX(0);
+    }
+}
+
+/* Micro-interactions for hover effects */
+@keyframes glow {
+    from {
+        box-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
+    }
+    to {
+        box-shadow: 0 0 40px rgba(255, 255, 255, 0.6);
+    }
+}
+
+/* Responsive Design for Mobile Devices */
+@media (max-width: 768px) {
+    main {
+        padding: 30px;
+    }
+
+    h1 {
+        font-size: 2rem;
+    }
+
+    #start-camera {
+        padding: 10px 25px;
+        font-size: 1.2rem;
+    }
+
+    #qr-reader {
+        max-width: 260px;
+    }
+}
+
+footer {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    text-align: center;
+    padding: 20px 0;
+    background-color: #073B4C;
+    color: #FFD166;
+    font-size: 1rem;
+    box-shadow: 0 -2px 6px rgba(0, 0, 0, 0.4);
+}
